@@ -19,14 +19,18 @@ export default function App() {
     api.get('repositories').then(response => {
       setRepositories(response.data);
     });
-  });
+  }, []);
 
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`);
-    const repository = response.data;
-    const repoIndex = repositories.findIndex(repo => repo.id === repository.id);
-    repositories[repoIndex] = repository;
-    setRepositories(repositories);
+    
+    const repositoryLiked = response.data;
+    
+    const updRepos = repositories.map(repo => {
+      return repo.id === id ? repo = repositoryLiked : repo;
+    });  
+    
+    setRepositories(updRepos);
   }
 
   return (
